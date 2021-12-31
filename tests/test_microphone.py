@@ -1,6 +1,6 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.8
 
-# pythonn  tests/test_microphone.py --filename tests/data/test_record.wav --model models/vosk-model-small-en-us --device "hw:2,0" --samplerate 44100
+# pythonn  tests/test_microphone.py --filename tests/data/test_record.wav --model models/vosk-model-small-en-us --device "hw:2,0" --samplerate 44100 --rectime 10
 
 import argparse
 import os
@@ -50,9 +50,9 @@ parser.add_argument(
     '-d', '--device', type=int_or_str,
     help='input device (numeric ID or substring)')
 parser.add_argument(
-    '-r', '--samplerate', type=int, help='sampling rate')
+    '-r', '--samplerate', type=int, help='sampling rate', default=44100)
 parser.add_argument(
-    '-b', '--bufferlength', type=int, help='number of blocks to buffer before attempting speechtotext')
+    '-t', '--rectime', type=int, help='number seconds to record', default=5)
 args = parser.parse_args(remaining)
 
 
@@ -108,9 +108,6 @@ def consume_recording(args):
         print(rec.PartialResult())
     if dump_fn is not None:
         dump_fn.write(data)
-
-
-                
 
 
 
