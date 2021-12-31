@@ -11,7 +11,10 @@ from config import (
     BLOCKSIZE
 )
 
-text_queue = asyncio.Queue()
+
+def get_output_queue():
+    return asyncio.Queue()
+
 
 async def stream_generator(dtype='int16', channels=1):
     """Generator that yields blocks of input/output data as NumPy arrays.
@@ -32,7 +35,7 @@ async def stream_generator(dtype='int16', channels=1):
             yield indata, status
             
 
-async def listen_stream(**kwargs):
+async def listen_stream(text_queue: asyncio.Queue):
     """
     listens to the stream and convert to text. 
 
@@ -50,4 +53,4 @@ async def listen_stream(**kwargs):
         data = b"".join(list(temp_buffer))
         temp_buffer.pop()
         text = await speech_to_text(recognizer, data)
-        text_queue.put(text)
+        await text_queue.put(text)
